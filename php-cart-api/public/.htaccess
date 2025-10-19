@@ -1,0 +1,9 @@
+# Send everything to index.php unless it's a real file
+RewriteEngine On
+
+# Static files pass through
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [L]
+
+# All other requests → index.php
+RewriteRule ^ index.php [QSA,L]
