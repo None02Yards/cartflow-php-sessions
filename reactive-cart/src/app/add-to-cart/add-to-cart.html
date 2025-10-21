@@ -1,29 +1,10 @@
-<!-- <header>
-
-<div style="margin-bottom:12px;">
-  <ng-container *ngIf="auth.user(); else guest">
-    Logged in as <b>{{ auth.user()?.email }}</b>
-    <button (click)="auth.logout()">Logout</button>
-  </ng-container>
-  <ng-template #guest>
-    <form (submit)="auth.login(loginEmail.value, loginPass.value); $event.preventDefault()">
-      <input #loginEmail placeholder="email"> <input #loginPass type="password" placeholder="password">
-      <button type="submit">Login</button>
-    </form>
-  </ng-template>
-</div>
-
-
-</header> -->
-
-
 
 <section style="max-width:900px;margin:24px auto;font-family:system-ui,Arial;">
   <h2>{{ cart.header() }}</h2>
   <h1>Add to Cart — Mock Catalog</h1>
 
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;">
-    <!-- Catalog -->
+   
     <div style="border:1px solid #e5e7eb;border-radius:12px;padding:16px;">
       <h3>Catalog</h3>
       <input placeholder="Search (name or SKU)" (input)="onSearch($any($event.target).value)"
@@ -41,7 +22,7 @@
       </div>
     </div>
 
-    <!-- Order summary -->
+ 
     <div style="border:1px solid #e5e7eb;border-radius:12px;padding:16px;">
       <h3>Order</h3>
       <div><b>Created:</b>  {{ cart.fmt(cart.order().ts.createdAtUtc) }}</div>

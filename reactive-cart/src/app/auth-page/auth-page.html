@@ -4,20 +4,41 @@
     <button [class.active]="mode==='login'" (click)="switch('login')">Sign in</button>
   </div>
 
-  <form class="form" (ngSubmit)="submit()" autocomplete="off">
-  <label>Email</label>
-  <input [(ngModel)]="email" name="email" type="email"
-         placeholder="you@example.com" required />
+<form (ngSubmit)="submit()" novalidate>
+  @if (error) {
+    <p class="alert" aria-live="polite">
+      {{ error }}
+      <button type="button" class="x" (click)="error=''">×</button>
+    </p>
+  }
 
-  <label>Password</label>
-  <input [(ngModel)]="password" name="password" type="password"
-         placeholder="minimum 8 chars" minlength="8" required />
+  <fieldset [disabled]="busy">
+    <label>
+      Email
+      <input type="email" name="email" [(ngModel)]="email" required />
+    </label>
 
-  <button type="submit" [disabled]="busy">
-    {{ mode === 'signup' ? 'Create account' : 'Login' }}
-  </button>
+    <label>
+      Password
+      <input type="password" name="password" [(ngModel)]="password" minlength="8" required />
+    </label>
 
-  <p class="error" *ngIf="error">{{ error }}</p>
+    <div class="row">
+      <button type="submit">
+        {{ mode === 'signup' ? 'Sign up' : 'Log in' }}
+      </button>
+      <button type="button" (click)="switch(mode==='signup' ? 'login' : 'signup')">
+        Switch to {{ mode==='signup' ? 'login' : 'signup' }}
+      </button>
+
+      @if (busy) {
+        <span>Processing…</span>
+      }
+    </div>
+  </fieldset>
 </form>
+
+
+
 
 </div>

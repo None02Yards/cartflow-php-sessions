@@ -7,7 +7,7 @@ import { AuthService } from '../auth';
 @Component({
   selector: 'app-auth-page',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule,],
   templateUrl: './auth-page.html',
   styleUrls: ['./auth-page.css'],
 })
@@ -15,7 +15,7 @@ export class AuthPageComponent {
   mode: 'signup' | 'login' = 'signup';
   email = '';
   password = '';
-  error = '';
+  error: string = '';
   busy = false;
 
   constructor(private auth: AuthService, private router: Router) {
@@ -30,14 +30,12 @@ export class AuthPageComponent {
     this.error = '';
   }
 
- submit() {
+submit() {
   this.error = '';
   this.busy = true;
 
   const email = this.email.trim();
   const pass = this.password;
-
-  console.log('[auth] submit', this.mode, email);
 
   const req$ = this.mode === 'signup'
     ? this.auth.signup(email, pass)
@@ -45,18 +43,20 @@ export class AuthPageComponent {
 
   req$.subscribe({
     next: () => {
-      console.log('[auth] success, navigating to /cart');
       this.router.navigateByUrl('/cart');
     },
     error: (e: any) => {
       console.error('[auth] error', e);
-      this.error = e?.error?.error ?? `${this.mode} failed`;
+      this.error =
+        e?.error?.error ??
+        e?.error?.message ??
+        e?.message ??
+        `${this.mode} failed`;
       this.busy = false;
     },
-    complete: () => {
-      this.busy = false;
-    }
+    complete: () => (this.busy = false),
   });
 }
+
 
 }

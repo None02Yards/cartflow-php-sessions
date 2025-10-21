@@ -1,3 +1,11 @@
+
+export interface CatalogProduct {
+  id: string;
+  sku: string;
+  name: string;
+  price: number;
+}
+
 export interface CartItem {
   sku: string;
   name: string;
@@ -16,6 +24,27 @@ export interface PurchaseOrder {
   id: string;
   items: CartItem[];
   ts: OrderTimestamps;
-  customerTimeZone: string;  // e.g., 'Africa/Cairo'
-  shippingDays: number;      // e.g., 3.5
+  customerTimeZone: string;
+  shippingDays: number;
+  status?: 'open' | 'delivered';
+}
+
+export interface User {
+  id: string;
+  email: string;
+}
+
+export interface DeliverResponse {
+  ok: true;
+  archivedFile: string;
+  newOrder: PurchaseOrder;
+}
+//  backend sometimes return only { ok: true }, switch to:
+// export type DeliverResponse {
+//   | { ok: true; archivedFile: string; newOrder: PurchaseOrder }
+//   | { ok: true };
+
+export interface ResetResponse {
+  ok: boolean;
+  newOrder: PurchaseOrder;
 }

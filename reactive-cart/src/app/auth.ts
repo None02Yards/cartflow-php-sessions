@@ -7,9 +7,8 @@ interface MeResp { user: User | null; }
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private base = 'http://127.0.0.1:8000/api';
+    private base = 'http://127.0.0.1:8081/api'; // ← make this match your PHP server
   private opts = { withCredentials: true as const };
-
   user = signal<User | null>(null);
 
   constructor(private http: HttpClient) {}

@@ -1,9 +1,8 @@
 
-
 import { Injectable, computed, signal } from '@angular/core';
-import type { CartItem, PurchaseOrder } from './models';
+import type { CartItem, PurchaseOrder, DeliverResponse, ResetResponse } from './models';
 import { DateTimeService } from './datetime';
-import { ApiService } from './api';
+import { ApiService } from './services/api.service';
 import { Router } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
@@ -39,18 +38,22 @@ export class CartService {
     private router: Router
   ) {}
 
-  private handleAuthOrSet(o: any) {
-    if (o?.newOrder) {
-      this._order.set(o.newOrder as PurchaseOrder);
-      return;
-    }
-    // only if backend returned a empty PurchaseOrder
-    if (o?.id && Array.isArray(o?.items)) {
-      this._order.set(o as PurchaseOrder);
-      return;
-    }
-    console.warn('Unexpected order payload', o);
+private handleAuthOrSet(o: PurchaseOrder | DeliverResponse | ResetResponse) {
+  if ((o as DeliverResponse)?.newOrder) {
+    this._order.set((o as DeliverResponse).newOrder);
+    return;
   }
+  if ((o as ResetResponse)?.newOrder) {
+    this._order.set((o as ResetResponse).newOrder);
+    return;
+  }
+  if ((o as PurchaseOrder)?.id && Array.isArray((o as PurchaseOrder)?.items)) {
+    this._order.set(o as PurchaseOrder);
+    return;
+  }
+  console.warn('Unexpected order payload', o);
+}
+
 
   private handleErr = (err: any) => {
     if (err?.status === 401) {
@@ -60,74 +63,80 @@ export class CartService {
     console.error('Cart API error', err);
   };
 
-  // mutations / queries 
-  loadOrderFromServer() {
-    this.api.getOrder().subscribe({
-      next: (o) => this.handleAuthOrSet(o),
-      error: this.handleErr,
-    });
+// Mutations / Queries 
+
+loadOrderFromServer() {
+  this.api.getOrder().subscribe({
+    next: (o: PurchaseOrder) => this.handleAuthOrSet(o),
+    error: this.handleErr,
+  });
+}
+
+setCustomerTimeZone(tz: string) {
+  this._order.update((o: PurchaseOrder) => ({ ...o, customerTimeZone: tz }));
+}
+
+setCreatedAtFromInput(input: string) {
+  const d = new Date(input);
+  const ms = Number.isFinite(+d) ? d.getTime() : Date.now();
+  this._order.update((o: PurchaseOrder) => ({
+    ...o,
+    ts: { ...o.ts, createdAtUtc: ms },
+  }));
+}
+
+addItem(item: CartItem) {
+  if (item.qty < 1 || item.unitPrice < 0) {
+    throw new Error('Invalid cart item');
   }
 
-  setCustomerTimeZone(tz: string) {
-    this._order.update((o) => ({ ...o, customerTimeZone: tz }));
-  }
+  this.api.addToCart(item).subscribe({
+    next: (o: PurchaseOrder) => this.handleAuthOrSet(o),
+    error: this.handleErr,
+  });
+}
 
-  setCreatedAtFromInput(input: string) {
-    const d = new Date(input);
-    const ms = Number.isFinite(+d) ? d.getTime() : Date.now();
-    this._order.update((o) => ({ ...o, ts: { ...o.ts, createdAtUtc: ms } }));
-  }
+capturePayment() {
+  this.api.pay().subscribe({
+    next: (o: PurchaseOrder) => this.handleAuthOrSet(o),
+    error: this.handleErr,
+  });
+}
 
-  addItem(item: CartItem) {
-    if (item.qty < 1 || item.unitPrice < 0) throw new Error('invalid item');
-    this.api.addToCart(item).subscribe({
-      next: (o) => this.handleAuthOrSet(o),
-      error: this.handleErr,
-    });
-  }
+markShipped() {
+  this.api.ship().subscribe({
+    next: (o: PurchaseOrder) => this.handleAuthOrSet(o),
+    error: this.handleErr,
+  });
+}
 
-  capturePayment() {
-    this.api.pay().subscribe({
-      next: (o) => this.handleAuthOrSet(o),
-      error: this.handleErr,
-    });
-  }
+/**
+ * Mark delivered manually!
+ * Archives the current order to /data/orders/...
+ * Backend resets session to a brand new order.
+ * We immediately render the new empty order.
+ */
+markDelivered(ms: number) {
+  this.api.deliver(ms).subscribe({
+    next: (o: DeliverResponse) => this.handleAuthOrSet(o),
+    error: this.handleErr,
+  });
+}
 
-  markShipped() {
-    this.api.ship().subscribe({
-      next: (o) => this.handleAuthOrSet(o),
-      error: this.handleErr,
-    });
-  }
+/** manual "start new order"  */
+startNewOrder() {
+  this.api.reset().subscribe({
+    next: (o: ResetResponse) => this.handleAuthOrSet(o),
+    error: this.handleErr,
+  });
+}
 
-  /**
-   * Mark delivered manually!
-   *  archives the current order to /data/orders/...
-   *  Backend resets session to a brand new order
-   *  We immediately render the new empty order
-   */
-  markDelivered(ms: number) {
-    this.api.deliver(ms).subscribe({
-      next: (o) => this.handleAuthOrSet(o),
-      error: this.handleErr,
-    });
-  }
+fmt(utcMs?: number, pattern?: Intl.DateTimeFormatOptions): string {
+  if (!utcMs) return '—';
+  return this.dt.formatInTz(utcMs, this._order().customerTimeZone, pattern);
+}
 
-  /** Optional: manual "start new order" without delivering */
-  startNewOrder() {
-    this.api.reset().subscribe({
-      next: (o) => this.handleAuthOrSet(o),
-      error: this.handleErr,
-    });
-  }
-
- 
-  fmt(utcMs?: number, pattern?: Intl.DateTimeFormatOptions): string {
-    if (!utcMs) return '—';
-    return this.dt.formatInTz(utcMs, this._order().customerTimeZone, pattern);
-  }
-
-  header(): string {
-    return this.dt.localizedHeader(Date.now(), this._order().customerTimeZone);
-  }
+header(): string {
+  return this.dt.localizedHeader(Date.now(), this._order().customerTimeZone);
+}
 }
