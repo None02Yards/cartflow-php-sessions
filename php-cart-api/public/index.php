@@ -347,5 +347,26 @@ if ($method === 'POST' && $path === '/api/export') {
   respond(['ok' => $ok, 'file' => basename($file)]);
 }
 
+// manual reset!!!
+// POST /api/order/reset  -> { ok: true, newOrder }
+if ($method === 'POST' && $path === '/api/order/reset') {
+  require_auth();
+
+  $newOrder = [
+    'id' => 'PO-' . date('Ymd-His'),
+    'items' => [],
+    'ts' => ['createdAtUtc' => (int)(microtime(true) * 1000)],
+    'customerTimeZone' => 'Africa/Cairo',
+    'shippingDays' => 3.5,
+    'status' => 'open',
+  ];
+
+  $_SESSION['order'] = $newOrder;
+
+  log_event('order_reset');
+  respond(['ok' => true, 'newOrder' => $newOrder]);
+}
+
+
 /** 404 */
 respond(['error' => 'Not found', 'path' => $path], 404);
