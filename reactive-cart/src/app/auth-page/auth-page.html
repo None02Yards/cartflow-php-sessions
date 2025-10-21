@@ -1,0 +1,23 @@
+<div class="auth-shell">
+  <div class="tabs">
+    <button [class.active]="mode==='signup'" (click)="switch('signup')">Sign up</button>
+    <button [class.active]="mode==='login'" (click)="switch('login')">Sign in</button>
+  </div>
+
+  <form class="form" (ngSubmit)="submit()" autocomplete="off">
+  <label>Email</label>
+  <input [(ngModel)]="email" name="email" type="email"
+         placeholder="you@example.com" required />
+
+  <label>Password</label>
+  <input [(ngModel)]="password" name="password" type="password"
+         placeholder="minimum 8 chars" minlength="8" required />
+
+  <button type="submit" [disabled]="busy">
+    {{ mode === 'signup' ? 'Create account' : 'Login' }}
+  </button>
+
+  <p class="error" *ngIf="error">{{ error }}</p>
+</form>
+
+</div>

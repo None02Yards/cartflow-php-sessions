@@ -1,24 +1,38 @@
 
 import { Component } from '@angular/core';
-import { NgFor, CurrencyPipe, DecimalPipe } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+// import { FormsModule } from '@angular/forms';
+
+import { CurrencyPipe, DecimalPipe } from '@angular/common';import { FormsModule } from '@angular/forms';
 import { CartService } from '../cart';
 import { CatalogService } from '../catalog';
+import { AuthService } from '../auth';
+
+
 
 @Component({
   selector: 'app-add-to-cart',
   standalone: true,
-  imports: [NgFor, FormsModule, CurrencyPipe, DecimalPipe],
+  imports: [
+  CommonModule,   
+    FormsModule,      
+    CurrencyPipe,
+    DecimalPipe
+  ],
   templateUrl: './add-to-cart.html',
   styleUrls: ['./add-to-cart.css'],
 })
 export class AddToCartComponent {
-  constructor(public cart: CartService, public catalog: CatalogService) {
-    
-    this.cart.loadOrderFromServer();
-    this.catalog.loadFromServer();
-    this.cart.setCustomerTimeZone('Africa/Cairo');
-  }
+ constructor(
+  public cart: CartService,
+  public catalog: CatalogService,
+  public auth: AuthService
+) {
+  this.auth.me();                // session probe on entry
+  this.cart.loadOrderFromServer();
+  this.catalog.loadFromServer();
+  this.cart.setCustomerTimeZone('Africa/Cairo');
+}
 
   onSearch(q: string) { this.catalog.setQuery(q); }
   addProduct(id: string) {

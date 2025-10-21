@@ -1,0 +1,20 @@
+{
+    "id": "PO-20251021-172904",
+    "items": [
+        {
+            "sku": "SKU-004",
+            "name": "Ergo Mouse",
+            "qty": 1,
+            "unitPrice": 59
+        }
+    ],
+    "ts": {
+        "createdAtUtc": 1761067744301,
+        "shippedAtUtc": 1761152400000,
+        "paidAtUtc": 1761067751661,
+        "deliveredAtUtc": 1760891400000
+    },
+    "customerTimeZone": "Africa/Cairo",
+    "shippingDays": 3.5,
+    "status": "delivered"
+}

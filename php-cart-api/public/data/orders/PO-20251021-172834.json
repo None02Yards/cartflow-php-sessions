@@ -1,0 +1,13 @@
+{
+    "id": "PO-20251021-172834",
+    "items": [],
+    "ts": {
+        "createdAtUtc": 1761067714535,
+        "shippedAtUtc": 1761152400000,
+        "paidAtUtc": 1761067742730,
+        "deliveredAtUtc": 1760891400000
+    },
+    "customerTimeZone": "Africa/Cairo",
+    "shippingDays": 3.5,
+    "status": "delivered"
+}
