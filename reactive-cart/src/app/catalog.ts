@@ -1,3 +1,4 @@
+
 import { Injectable, signal, computed } from '@angular/core';
 import { ApiService } from './services/api.service';
 import { CatalogProduct } from './models'; 
@@ -17,7 +18,7 @@ export class CatalogService {
       error: (err) => console.error('[catalog] load failed', err),
     });
   }
-
+  
    setQuery(q: string) { this._query.set(q.trim()); }
 
   products = computed(() => {
