@@ -1,4 +1,4 @@
-
+// E:\phpServer-cart\cartflow-php-sessions\reactive-cart\src\app\models.ts
 export interface CatalogProduct {
   id: string;
   sku: string;

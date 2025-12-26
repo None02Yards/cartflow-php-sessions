@@ -1,4 +1,4 @@
-
+// E:\phpServer-cart\cartflow-php-sessions\reactive-cart\src\app\services\api.service.ts
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -14,7 +14,8 @@ import {
 @Injectable({ providedIn: 'root' })
 export class ApiService {
   private http = inject(HttpClient);
-  private readonly apiBase = 'http://127.0.0.1:8081/api';
+  private readonly apiBase = 'http://localhost:8081/api';
+
   private readonly json = new HttpHeaders({ 'Content-Type': 'application/json' });
   private readonly opts = { headers: this.json, withCredentials: true as const };
 
