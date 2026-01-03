@@ -115,4 +115,13 @@ export class ApiService {
       this.opts
     );
   }
+
+  removeFromCart(sku: string): Observable<PurchaseOrder> {
+  return this.http.post<PurchaseOrder>(
+    `${this.apiBase}/cart/remove`,
+    { sku },
+    this.opts
+  );
+}
+
 }

@@ -148,16 +148,99 @@ increment(item: CartItem) {
   });
 }
 
-decrement(item: CartItem) {
-  const current = this._order().items.find(i => i.sku === item.sku);
-  if (!current || current.qty <= 1) return;
+// decrement(item: CartItem) {
+//   const current = this._order().items.find(i => i.sku === item.sku);
+//   if (!current || current.qty <= 1) return;
 
-  const updated = this._order().items.map(i =>
-    i.sku === item.sku ? { ...i, qty: i.qty - 1 } : i
+//   const updated = this._order().items.map(i =>
+//     i.sku === item.sku ? { ...i, qty: i.qty - 1 } : i
+//   );
+
+//   this._order.update(o => ({ ...o, items: updated }));
+// }
+
+
+
+decrement(item: CartItem) {
+  const items = this._order().items;
+
+  const updated = items
+    .map(i =>
+      i.sku === item.sku
+        ? { ...i, qty: i.qty - 1 }
+        : i
+    )
+    .filter(i => i.qty > 0);
+
+  this._order.update(o => ({
+    ...o,
+    items: updated,
+  }));
+}
+
+// removeItem(item: CartItem) {
+//   const updated = this._order().items.filter(
+//     i => i.sku !== item.sku
+//   );
+
+//   this._order.update(o => ({
+//     ...o,
+//     items: updated,
+//   }));
+// }
+
+
+removeBySku(sku: string) {
+  const updated = this._order().items.filter(
+    i => i.sku !== sku
   );
 
-  this._order.update(o => ({ ...o, items: updated }));
+  this._order.update((o: PurchaseOrder) => ({
+    ...o,
+    items: updated,
+  }));
 }
+
+
+
+removeItem(sku: string) {
+  this.api.removeFromCart(sku).subscribe({
+    next: o => this.handleAuthOrSet(o),
+    error: this.handleErr,
+  });
+}
+
+
+checkout() {
+  // 1️⃣ Capture payment
+  this.api.pay().subscribe({
+    next: () => {
+      // 2️⃣ Reset order after successful payment
+      this.api.reset().subscribe({
+        next: o => this.handleAuthOrSet(o),
+        error: this.handleErr,
+      });
+    },
+    error: this.handleErr,
+  });
+}
+
+
+getQty(sku: string): number {
+  return this.order().items
+    .filter(i => i.sku === sku)
+    .reduce((sum, i) => sum + i.qty, 0);
+}
+
+hasItem(sku: string): boolean {
+  return this.getQty(sku) > 0;
+}
+
+
+
+
+
+
 
   // ─────────────────────────
   // Checkout lifecycle
