@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 /**
  * ==========================================================
- * CORS — SINGLE ORIGIN, COOKIE-SAFE
+ * CORS — COOKIE-SAFE (Angular dev)
  * ==========================================================
  */
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
@@ -27,15 +27,13 @@ date_default_timezone_set('UTC');
 
 /**
  * ==========================================================
- * SESSION — MUST COME BEFORE session_start()
+ * SESSION CONFIG (BEFORE session_start)
  * ==========================================================
  */
 session_set_cookie_params([
     'path'     => '/',
     'httponly' => true,
     'samesite' => 'Lax',
-    // no domain → defaults to localhost (correct)
-    // no secure → HTTP dev mode
 ]);
 
 session_start();
@@ -68,7 +66,7 @@ function require_auth(): void {
 
 /**
  * ==========================================================
- * SESSION STATE (MVP)
+ * SESSION STATE (ORDER + USER)
  * ==========================================================
  */
 $_SESSION['order'] ??= [
@@ -83,7 +81,7 @@ $_SESSION['user'] ??= null;
 
 /**
  * ==========================================================
- * CATALOG (STATIC, CLEAN IDS)
+ * STATIC CATALOG
  * ==========================================================
  */
 $catalog = [
@@ -99,10 +97,10 @@ $catalog = [
 
 /**
  * ==========================================================
- * USERS (FILE-BACKED)
+ * USER STORE (FILE BACKED)
  * ==========================================================
  */
-const DATA_DIR = __DIR__ . '/data';
+const DATA_DIR   = __DIR__ . '/data';
 const USERS_FILE = DATA_DIR . '/users.json';
 
 if (!is_dir(DATA_DIR)) {
@@ -138,12 +136,12 @@ function new_user_id(): string {
  * ==========================================================
  */
 
-/* catalog */
+/* ---------- Catalog ---------- */
 if ($method === 'GET' && $path === '/api/catalog') {
     respond(['products' => $catalog]);
 }
 
-/* signup */
+/* ---------- Signup ---------- */
 if ($method === 'POST' && $path === '/api/signup') {
     $b = jsonBody();
     $email = strtolower(trim($b['email'] ?? ''));
@@ -173,7 +171,7 @@ if ($method === 'POST' && $path === '/api/signup') {
     respond(['ok' => true, 'user' => $_SESSION['user']]);
 }
 
-/* login */
+/* ---------- Login ---------- */
 if ($method === 'POST' && $path === '/api/login') {
     $b = jsonBody();
     $email = strtolower(trim($b['email'] ?? ''));
@@ -192,25 +190,25 @@ if ($method === 'POST' && $path === '/api/login') {
     respond(['ok' => true, 'user' => $_SESSION['user']]);
 }
 
-/* me */
+/* ---------- Me ---------- */
 if ($method === 'GET' && $path === '/api/me') {
     respond(['user' => $_SESSION['user']]);
 }
 
-/* order */
+/* ---------- Order ---------- */
 if ($method === 'GET' && $path === '/api/order') {
     require_auth();
     respond($_SESSION['order']);
 }
 
-/* add to cart */
+/* ---------- Add to Cart ---------- */
 if ($method === 'POST' && $path === '/api/cart/add') {
     require_auth();
     $b = jsonBody();
 
     $_SESSION['order']['items'][] = [
-        'sku' => $b['sku'],
-        'name' => $b['name'],
+        'sku' => (string)$b['sku'],
+        'name' => (string)$b['name'],
         'qty' => (int)$b['qty'],
         'unitPrice' => (float)$b['unitPrice'],
     ];
@@ -218,25 +216,47 @@ if ($method === 'POST' && $path === '/api/cart/add') {
     respond($_SESSION['order']);
 }
 
-/* pay */
+/* ---------- REMOVE FROM CART (REAL FIX) ---------- */
+if ($method === 'POST' && $path === '/api/cart/remove') {
+    require_auth();
+    $b = jsonBody();
+
+    if (!isset($b['sku'])) {
+        respond(['error' => 'Missing sku'], 400);
+    }
+
+    $sku = (string)$b['sku'];
+
+    $_SESSION['order']['items'] = array_values(
+        array_filter(
+            $_SESSION['order']['items'],
+            fn ($i) => $i['sku'] !== $sku
+        )
+    );
+
+    respond($_SESSION['order']);
+}
+
+/* ---------- Pay ---------- */
 if ($method === 'POST' && $path === '/api/order/pay') {
     require_auth();
     $_SESSION['order']['ts']['paidAtUtc'] = (int)(microtime(true) * 1000);
     respond($_SESSION['order']);
 }
 
-/* ship */
+/* ---------- Ship ---------- */
 if ($method === 'POST' && $path === '/api/order/ship') {
     require_auth();
-    $_SESSION['order']['ts']['shippedAtUtc'] = time() * 1000;
+    $_SESSION['order']['ts']['shippedAtUtc'] = (int)(microtime(true) * 1000);
     respond($_SESSION['order']);
 }
 
-/* logout */
+/* ---------- Logout ---------- */
 if ($method === 'POST' && $path === '/api/logout') {
     $_SESSION['user'] = null;
     session_regenerate_id(true);
     respond(['ok' => true]);
 }
 
+/* ---------- Fallback ---------- */
 respond(['error' => 'Not found'], 404);
