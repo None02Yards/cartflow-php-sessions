@@ -18,32 +18,46 @@
         <span></span>
       </div>
 
-      <div
-        class="cart-row"
-        *ngFor="let p of catalog.products()"
-      >
-        <div class="product">
-          <div class="product-placeholder">
-            {{ p.name.charAt(0) }}
-          </div>
 
-          <div>
-            <div class="name">{{ p.name }}</div>
-            <div class="sku">{{ p.sku }}</div>
-          </div>
-        </div>
-
-        <div>{{ p.price | currency }}</div>
-
-        <div></div>
-
-        <div>
-          <button class="primary" (click)="addProduct(p.id)">
-            Add
-          </button>
-        </div>
-      </div>
+<div class="cart-row" *ngFor="let p of catalog.products()">
+  <!-- PRODUCT -->
+  <div class="product">
+    <div class="product-placeholder">
+      {{ p.name.charAt(0) }}
     </div>
+
+    <div>
+      <div class="name">{{ p.name }}</div>
+      <div class="sku">{{ p.sku }}</div>
+    </div>
+  </div>
+
+  <!-- PRICE -->
+  <div>{{ p.price | currency }}</div>
+
+  <!-- SPACER -->
+  <div></div>
+
+  <!-- ACTIONS -->
+  <div class="actions">
+    <button class="primary" (click)="addProduct(p.id)">
+      Add
+    </button>
+
+    <button
+      class="remove"
+      *ngIf="cart.hasItem(p.sku)"
+      (click)="removeBySku(p.sku)"
+    >
+      Remove
+    </button>
+  </div>
+</div>
+
+
+
+
+</div>
 
     <!-- RIGHT: ORDER SUMMARY (unchanged logic) -->
     <aside class="cart-summary">
@@ -65,9 +79,10 @@
           <span>{{ cart.total() | currency }}</span>
         </div>
 
-        <button class="checkout" (click)="pay()">
-          Checkout
-        </button>
+      <button class="checkout" (click)="checkout()">
+  Checkout
+</button>
+
       </div>
 
       <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap;">
