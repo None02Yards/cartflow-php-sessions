@@ -72,6 +72,9 @@
   margin-bottom: 12px;
 }
 
+.primary.skin{
+   background: rgb(125, 122, 122) !important;
+}
 .summary-box {
   background: #fde3b4;
   padding: 16px;
@@ -146,4 +149,29 @@
 .order-actions button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+
+.order-history {
+  margin-top: 20px;
+}
+
+.order-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px dashed #ddd;
+}
+
+.order-id {
+  font-family: monospace;
+  font-size: 13px;
+}
+
+.order-actions button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 18px;
 }

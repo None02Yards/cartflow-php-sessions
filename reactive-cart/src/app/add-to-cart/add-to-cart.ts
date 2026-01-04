@@ -115,9 +115,10 @@ export class AddToCartComponent implements OnInit {
   // Checkout lifecycle
   // ─────────────────────────
 
-  pay() {
-    this.cart.capturePayment();
-  }
+pay() {
+  this.cart.capturePayment();
+}
+
 
   ship() {
     this.cart.markShipped();
@@ -149,6 +150,14 @@ checkout() {
   this.cart.checkout();
 }
 
+shipOrder(orderId: string) {
+  // for now, acts on active order
+  this.cart.markShipped();
+}
+
+deliverOrder(orderId: string) {
+  this.cart.markDelivered(Date.now());
+}
 
 
 }

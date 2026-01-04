@@ -45,7 +45,7 @@
     </button>
 
     <button
-      class="remove"
+      class="primary skin"
       *ngIf="cart.hasItem(p.sku)"
       (click)="removeBySku(p.sku)"
     >
@@ -78,10 +78,14 @@
           <span>Total</span>
           <span>{{ cart.total() | currency }}</span>
         </div>
-
-      <button class="checkout" (click)="checkout()">
+<button
+  type="button"
+  class="checkout"
+  (click)="pay()"
+>
   Checkout
 </button>
+
 
       </div>
 
@@ -95,9 +99,44 @@
     Mark Delivered
   </button>
 </div>
+<!-- ORDER HISTORY -->
+<section class="order-history">
+  <h4>Orders</h4>
+
+  <p *ngIf="cart.completedOrders().length === 0" class="empty">
+    No orders yet
+  </p>
+
+  <div
+    class="order-row"
+    *ngFor="let o of cart.completedOrders()"
+  >
+    <span class="order-id">{{ o.id }}</span>
+
+    <div class="order-actions">
+      <button
+        class="icon ship"
+        (click)="shipOrder(o.id)"
+        title="Mark Shipped"
+      >
+        🚚
+      </button>
+
+      <button
+        class="icon deliver"
+        (click)="deliverOrder(o.id)"
+        title="Mark Delivered"
+      >
+        📦
+      </button>
+    </div>
+  </div>
+</section>
 
       </div>
     </aside>
+
+      
 
   </div>
 </section>
