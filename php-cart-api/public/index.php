@@ -237,12 +237,45 @@ if ($method === 'POST' && $path === '/api/cart/remove') {
     respond($_SESSION['order']);
 }
 
-/* ---------- Pay ---------- */
+/* ---------- Pay (ARCHIVE + RESET) ---------- */
 if ($method === 'POST' && $path === '/api/order/pay') {
     require_auth();
+
+    // mark paid
     $_SESSION['order']['ts']['paidAtUtc'] = (int)(microtime(true) * 1000);
-    respond($_SESSION['order']);
+
+    // ensure orders dir
+    $ordersDir = __DIR__ . '/data/orders';
+    if (!is_dir($ordersDir)) {
+        mkdir($ordersDir, 0775, true);
+    }
+
+    // archive current order
+    $archivedOrder = $_SESSION['order'];
+    $archivedId = $archivedOrder['id'];
+
+    file_put_contents(
+        $ordersDir . '/' . $archivedId . '.json',
+        json_encode($archivedOrder, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)
+    );
+
+    // reset session to NEW empty order
+    $_SESSION['order'] = [
+        'id' => 'PO-' . date('Ymd-His'),
+        'items' => [],
+        'ts' => ['createdAtUtc' => (int)(microtime(true) * 1000)],
+        'customerTimeZone' => 'Africa/Cairo',
+        'shippingDays' => 3.5,
+        'status' => 'open',
+    ];
+
+    respond([
+        'ok' => true,
+        'archivedOrderId' => $archivedId,
+        'newOrder' => $_SESSION['order'],
+    ]);
 }
+
 
 /* ---------- Ship ---------- */
 if ($method === 'POST' && $path === '/api/order/ship') {

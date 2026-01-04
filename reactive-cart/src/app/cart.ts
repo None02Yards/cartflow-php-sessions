@@ -68,7 +68,9 @@ export class CartService {
 
 
 
+  private readonly _completedOrders = signal<PurchaseOrder[]>([]);
 
+completedOrders = computed(() => this._completedOrders());
 
 
 
@@ -246,12 +248,38 @@ hasItem(sku: string): boolean {
   // Checkout lifecycle
   // ─────────────────────────
 
-  capturePayment() {
-    this.api.pay().subscribe({
-      next: o => this.handleAuthOrSet(o),
-      error: this.handleErr,
-    });
-  }
+capturePayment() {
+  const snapshot = this.order();
+
+  this.api.pay().subscribe({
+    next: o => {
+      // store checked-out order locally
+      this._completedOrders.update(list => [...list, snapshot]);
+
+      // update active order
+      this.handleAuthOrSet(o);
+    },
+    error: this.handleErr,
+  });
+}
+
+capturePaymentAndReset() {
+  this.api.pay().subscribe({
+    next: () => {
+      // once payment succeeds → reset order
+      this.api.reset().subscribe({
+        next: o => this.handleAuthOrSet(o),
+        error: this.handleErr,
+      });
+    },
+    error: this.handleErr,
+  });
+}
+
+
+
+
+
 
   markShipped() {
     this.api.ship().subscribe({
