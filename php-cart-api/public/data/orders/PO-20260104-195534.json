@@ -1,0 +1,25 @@
+{
+    "id": "PO-20260104-195534",
+    "items": [
+        {
+            "sku": "SKU-002",
+            "name": "Desk Mat",
+            "qty": 1,
+            "unitPrice": 19.95
+        },
+        {
+            "sku": "SKU-002",
+            "name": "Desk Mat",
+            "qty": 1,
+            "unitPrice": 19.95
+        }
+    ],
+    "ts": {
+        "createdAtUtc": 1767556534345,
+        "shippedAtUtc": 1767556790945,
+        "paidAtUtc": 1767556798889
+    },
+    "customerTimeZone": "Africa\/Cairo",
+    "shippingDays": 3.5,
+    "status": "open"
+}

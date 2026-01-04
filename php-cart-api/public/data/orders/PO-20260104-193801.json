@@ -1,0 +1,54 @@
+{
+    "id": "PO-20260104-193801",
+    "items": [
+        {
+            "sku": "SKU-001",
+            "name": "Mechanical Keyboard",
+            "qty": 1,
+            "unitPrice": 129.99
+        },
+        {
+            "sku": "SKU-002",
+            "name": "Desk Mat",
+            "qty": 1,
+            "unitPrice": 19.95
+        },
+        {
+            "sku": "SKU-003",
+            "name": "USB-C Hub",
+            "qty": 1,
+            "unitPrice": 39.5
+        },
+        {
+            "sku": "SKU-004",
+            "name": "Ergo Mouse",
+            "qty": 1,
+            "unitPrice": 59
+        },
+        {
+            "sku": "SKU-002",
+            "name": "Desk Mat",
+            "qty": 1,
+            "unitPrice": 19.95
+        },
+        {
+            "sku": "SKU-002",
+            "name": "Desk Mat",
+            "qty": 1,
+            "unitPrice": 19.95
+        },
+        {
+            "sku": "SKU-006",
+            "name": "Desk Mat (Large)",
+            "qty": 1,
+            "unitPrice": 24.95
+        }
+    ],
+    "ts": {
+        "createdAtUtc": 1767555481085,
+        "paidAtUtc": 1767556036023,
+        "shippedAtUtc": 1767555637500
+    },
+    "customerTimeZone": "Africa\/Cairo",
+    "shippingDays": 3.5
+}

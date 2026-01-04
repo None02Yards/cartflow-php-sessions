@@ -1,0 +1,11 @@
+{
+    "id": "PO-20260104-194716",
+    "items": [],
+    "ts": {
+        "createdAtUtc": 1767556036027,
+        "paidAtUtc": 1767556534342
+    },
+    "customerTimeZone": "Africa\/Cairo",
+    "shippingDays": 3.5,
+    "status": "open"
+}
