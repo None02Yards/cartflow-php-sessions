@@ -1,0 +1,37 @@
+{
+    "id": "PO-20260104-195958",
+    "items": [
+        {
+            "sku": "SKU-003",
+            "name": "USB-C Hub",
+            "qty": 1,
+            "unitPrice": 39.5
+        },
+        {
+            "sku": "SKU-004",
+            "name": "Ergo Mouse",
+            "qty": 1,
+            "unitPrice": 59
+        },
+        {
+            "sku": "SKU-005",
+            "name": "Mechanical Keyboard (White)",
+            "qty": 1,
+            "unitPrice": 129.99
+        },
+        {
+            "sku": "SKU-006",
+            "name": "Desk Mat (Large)",
+            "qty": 1,
+            "unitPrice": 24.95
+        }
+    ],
+    "ts": {
+        "createdAtUtc": 1767556798891,
+        "shippedAtUtc": 1767556804849,
+        "paidAtUtc": 1767556990984
+    },
+    "customerTimeZone": "Africa\/Cairo",
+    "shippingDays": 3.5,
+    "status": "open"
+}

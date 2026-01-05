@@ -160,4 +160,40 @@ deliverOrder(orderId: string) {
 }
 
 
+qtyInCart(sku: string): number {
+  return this.cart.order().items
+    .filter(i => i.sku === sku)
+    .reduce((sum, i) => sum + i.qty, 0);
+}
+
+incrementSku(p: any) {
+  this.cart.add({
+    sku: p.sku,
+    name: p.name,
+    unitPrice: p.price,
+  });
+}
+
+decrementSku(p: any) {
+  const items = this.cart.order().items;
+  const index = items.findIndex(i => i.sku === p.sku);
+
+  if (index === -1) return;
+
+  const updated = [...items];
+  const item = updated[index];
+
+  if (item.qty > 1) {
+    updated[index] = { ...item, qty: item.qty - 1 };
+  } else {
+    updated.splice(index, 1);
+  }
+
+  (this.cart as any)._order.update((o: any) => ({
+    ...o,
+    items: updated,
+  }));
+}
+
+
 }

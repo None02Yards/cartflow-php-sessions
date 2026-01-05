@@ -1,0 +1,23 @@
+{
+    "id": "PO-20260105-152354",
+    "items": [
+        {
+            "sku": "SKU-001",
+            "name": "Mechanical Keyboard",
+            "qty": 1,
+            "unitPrice": 129.99
+        },
+        {
+            "sku": "SKU-006",
+            "name": "Desk Mat (Large)",
+            "qty": 1,
+            "unitPrice": 24.95
+        }
+    ],
+    "ts": {
+        "createdAtUtc": 1767626634619,
+        "paidAtUtc": 1767626913937
+    },
+    "customerTimeZone": "Africa\/Cairo",
+    "shippingDays": 3.5
+}

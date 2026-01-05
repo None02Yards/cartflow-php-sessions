@@ -40,9 +40,33 @@
 
   <!-- ACTIONS -->
   <div class="actions">
-    <button class="primary" (click)="addProduct(p.id)">
-      Add
+<div class="catalog-actions">
+  <div class="qty-controls">
+    <button
+      class="qty-btn"
+      (click)="decrementSku(p)"
+      [disabled]="qtyInCart(p.sku) === 0"
+    >
+      −
     </button>
+
+    <span class="qty-count">
+      {{ qtyInCart(p.sku) }}
+    </span>
+
+    <button
+      class="qty-btn"
+      (click)="incrementSku(p)"
+    >
+      +
+    </button>
+  </div>
+
+  <button class="primary" (click)="addProduct(p.id)">
+    Add
+  </button>
+</div>
+
 
     <button
       class="primary skin"
