@@ -1,0 +1,36 @@
+{
+    "id": "PO-20260105-171716",
+    "items": [
+        {
+            "sku": "SKU-003",
+            "name": "USB-C Hub",
+            "qty": 1,
+            "unitPrice": 39.5
+        },
+        {
+            "sku": "SKU-003",
+            "name": "USB-C Hub",
+            "qty": 1,
+            "unitPrice": 39.5
+        },
+        {
+            "sku": "SKU-003",
+            "name": "USB-C Hub",
+            "qty": 1,
+            "unitPrice": 39.5
+        },
+        {
+            "sku": "SKU-003",
+            "name": "USB-C Hub",
+            "qty": 1,
+            "unitPrice": 39.5
+        }
+    ],
+    "ts": {
+        "createdAtUtc": 1767633436741,
+        "paidAtUtc": 1767633474579
+    },
+    "customerTimeZone": "Africa\/Cairo",
+    "shippingDays": 3.5,
+    "status": "open"
+}
