@@ -1,6 +1,7 @@
 
 # 🛒 Mini Cart API — PHP Session-Backed Server
 
+![theme](./reactive-cart/src/assests/screencapture.png)
 
 - ✅ User authentication (signup/login/logout)
 - 🛍️ Catalog listing

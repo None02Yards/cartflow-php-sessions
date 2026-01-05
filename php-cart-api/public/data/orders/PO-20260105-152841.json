@@ -1,0 +1,31 @@
+{
+    "id": "PO-20260105-152841",
+    "items": [
+        {
+            "sku": "SKU-001",
+            "name": "Mechanical Keyboard",
+            "qty": 1,
+            "unitPrice": 129.99
+        },
+        {
+            "sku": "SKU-001",
+            "name": "Mechanical Keyboard",
+            "qty": 1,
+            "unitPrice": 129.99
+        },
+        {
+            "sku": "SKU-001",
+            "name": "Mechanical Keyboard",
+            "qty": 1,
+            "unitPrice": 129.99
+        }
+    ],
+    "ts": {
+        "createdAtUtc": 1767626921743,
+        "shippedAtUtc": 1767627645896,
+        "paidAtUtc": 1767627646481
+    },
+    "customerTimeZone": "Africa\/Cairo",
+    "shippingDays": 3.5,
+    "status": "open"
+}
