@@ -83,8 +83,14 @@
 
 </div>
 
+
+          <p class="status-message" *ngIf="statusMessage">
+  {{ statusMessage }}
+</p>
+
     <!-- RIGHT: ORDER SUMMARY (unchanged logic) -->
     <aside class="cart-summary">
+
       <h3>Order Summary</h3>
 
       <div class="summary-box">

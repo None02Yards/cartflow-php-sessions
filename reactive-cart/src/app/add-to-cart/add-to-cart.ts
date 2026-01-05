@@ -33,6 +33,7 @@ export class AddToCartComponent implements OnInit {
     this.catalog.loadFromServer();
     this.cart.setCustomerTimeZone('Africa/Cairo');
   }
+statusMessage = '';
 
   // ─────────────────────────
   // Lifecycle
@@ -130,18 +131,8 @@ pay() {
     );
   }
 
-//   removeBySku(sku: string) {
-//   const updated = this.cart
-//     .order()
-//     .items
-//     .filter(i => i.sku !== sku);
 
-//   // local replace (baseline-safe)
-//   (this.cart as any)._order.update(o => ({
-//     ...o,
-//     items: updated,
-//   }));
-// }
+
 removeBySku(sku: string) {
   this.cart.removeBySku(sku);
 }
@@ -152,11 +143,24 @@ checkout() {
 
 shipOrder(orderId: string) {
   // for now, acts on active order
+  if (!confirm('Are you sure you want to mark this order as shipped?')) {
+    return;
+  }
+
   this.cart.markShipped();
+  alert('🚚 Order marked as shipped');
 }
 
 deliverOrder(orderId: string) {
-  this.cart.markDelivered(Date.now());
+if (!confirm('Are you sure you want to mark this order as delivered?')) {
+    return;
+  }
+
+  this.cart.markDelivered(
+    Date.UTC(2025, 9, 19, 16, 30, 0)
+  );
+
+  alert('📦 Order marked as delivered');
 }
 
 
@@ -194,6 +198,7 @@ decrementSku(p: any) {
     items: updated,
   }));
 }
+
 
 
 }

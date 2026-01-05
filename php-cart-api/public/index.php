@@ -64,6 +64,31 @@ function require_auth(): void {
     }
 }
 
+
+// const ORDERS_DIR = DATA_DIR . '/orders';
+
+// if (!is_dir(ORDERS_DIR)) {
+//     mkdir(ORDERS_DIR, 0775, true);
+// }
+
+// function order_path(string $id): string {
+//     return ORDERS_DIR . '/' . basename($id) . '.json';
+// }
+
+// function load_order(string $id): array {
+//     $file = order_path($id);
+//     if (!is_file($file)) respond(['error' => 'Order not found'], 404);
+//     return json_decode(file_get_contents($file), true);
+// }
+
+// function save_order(array $order): void {
+//     file_put_contents(
+//         order_path($order['id']),
+//         json_encode($order, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)
+//     );
+// }
+
+
 /**
  * ==========================================================
  * SESSION STATE (ORDER + USER)
@@ -275,6 +300,37 @@ if ($method === 'POST' && $path === '/api/order/pay') {
         'newOrder' => $_SESSION['order'],
     ]);
 }
+
+
+// if ($method === 'POST' && $path === '/api/order/pay') {
+//     require_auth();
+
+//     $order = $_SESSION['order'];
+//     $order['ts']['paidAtUtc'] = (int)(microtime(true) * 1000);
+//     $order['status'] = 'paid';
+
+//     save_order($order);
+
+//     // RESET CART
+//     $_SESSION['order'] = [
+//         'id' => 'PO-' . date('Ymd-His'),
+//         'items' => [],
+//         'ts' => ['createdAtUtc' => (int)(microtime(true) * 1000)],
+//         'customerTimeZone' => 'Africa/Cairo',
+//         'shippingDays' => 3.5,
+//     ];
+
+//     respond([
+//         'ok' => true,
+//         'archivedOrder' => $order,
+//         'newOrder' => $_SESSION['order']
+//     ]);
+// }
+
+
+
+
+
 
 
 /* ---------- Ship ---------- */

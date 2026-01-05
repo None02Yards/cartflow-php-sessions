@@ -124,4 +124,27 @@ export class ApiService {
   );
 }
 
+getOrders() {
+  return this.http.get<{ orders: any[] }>(
+    `${this.apiBase}/orders`,
+    { withCredentials: true }
+  );
+}
+
+shipOrder(orderId: string) {
+  return this.http.post(
+    `${this.apiBase}/orders/ship`,
+    { orderId },
+    this.opts
+  );
+}
+
+deliverOrder(orderId: string) {
+  return this.http.post(
+    `${this.apiBase}/orders/deliver`,
+    { orderId },
+    this.opts
+  );
+}
+
 }

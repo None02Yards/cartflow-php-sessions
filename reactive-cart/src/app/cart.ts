@@ -73,9 +73,6 @@ export class CartService {
 completedOrders = computed(() => this._completedOrders());
 
 
-
-
-  
   // ─────────────────────────
   // Lifecycle
   // ─────────────────────────
@@ -110,6 +107,7 @@ completedOrders = computed(() => this._completedOrders());
     console.error('[cart] API error', err);
   };
 
+  
   // ─────────────────────────
   // Server sync
   // ─────────────────────────
